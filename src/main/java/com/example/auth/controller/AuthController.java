@@ -27,16 +27,23 @@ public class AuthController {
 
     @GetMapping("/")
     public String index(HttpSession session) {
-        if (session.getAttribute(SESSION_USER_KEY) != null) {
-            return "redirect:/home";
+        User user = (User) session.getAttribute(SESSION_USER_KEY);
+        if (user != null) {
+            return "ADMIN".equalsIgnoreCase(user.getRole()) ? "redirect:/admin/home" : "redirect:/home";
         }
         return "redirect:/login";
     }
 
     @GetMapping("/login")
-    public String showLoginPage(HttpSession session) {
+    public String showLoginPage(
+            @RequestParam(name = "error", required = false) String errorCode,
+            HttpSession session,
+            Model model) {
         if (session.getAttribute(SESSION_USER_KEY) != null) {
             return "redirect:/home";
+        }
+        if ("auth".equals(errorCode)) {
+            model.addAttribute("error", "Vui lòng đăng nhập bằng tài khoản ADMIN để truy cập trang quản trị.");
         }
         return "login";
     }
@@ -56,12 +63,16 @@ public class AuthController {
 
         Optional<User> authenticated = userService.authenticate(username, password);
         if (authenticated.isEmpty()) {
-            model.addAttribute("error", "Tên đăng nhập hoặc mật khẩu không chính xác.");
+            model.addAttribute("error", "Tên đăng nhập/mật khẩu không chính xác hoặc tài khoản đã bị khóa.");
             model.addAttribute("username", username);
             return "login";
         }
 
-        session.setAttribute(SESSION_USER_KEY, authenticated.get());
+        User user = authenticated.get();
+        session.setAttribute(SESSION_USER_KEY, user);
+        if ("ADMIN".equalsIgnoreCase(user.getRole())) {
+            return "redirect:/admin/home";
+        }
         return "redirect:/home";
     }
 
@@ -119,10 +130,16 @@ public class AuthController {
     }
 
     @GetMapping("/home")
-    public String showHomePage(HttpSession session, Model model) {
+    public String showHomePage(
+            @RequestParam(name = "error", required = false) String errorCode,
+            HttpSession session,
+            Model model) {
         User loggedInUser = (User) session.getAttribute(SESSION_USER_KEY);
         if (loggedInUser == null) {
             return "redirect:/login";
+        }
+        if ("forbidden".equals(errorCode)) {
+            model.addAttribute("error", "Bạn không có quyền truy cập trang quản trị (yêu cầu quyền ADMIN).");
         }
         model.addAttribute("user", loggedInUser);
         return "web/home";
@@ -131,9 +148,6 @@ public class AuthController {
     @GetMapping("/admin/home")
     public String showAdminHomePage(HttpSession session, Model model) {
         User loggedInUser = (User) session.getAttribute(SESSION_USER_KEY);
-        if (loggedInUser == null) {
-            return "redirect:/login";
-        }
         model.addAttribute("user", loggedInUser);
         return "admin/home";
     }

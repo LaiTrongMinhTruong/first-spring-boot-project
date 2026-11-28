@@ -30,6 +30,12 @@ public class User {
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
+    @Column(nullable = false, length = 20, columnDefinition = "varchar(20) default 'USER'")
+    private String role = "USER";
+
+    @Column(nullable = false, columnDefinition = "int default 1")
+    private Integer status = 1;
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -37,15 +43,27 @@ public class User {
     }
 
     public User(String username, String password, String fullName, String email) {
+        this(username, password, fullName, email, "USER", 1);
+    }
+
+    public User(String username, String password, String fullName, String email, String role, Integer status) {
         this.username = username;
         this.password = password;
         this.fullName = fullName;
         this.email = email;
+        this.role = role != null ? role : "USER";
+        this.status = status != null ? status : 1;
     }
 
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+        if (this.role == null || this.role.isBlank()) {
+            this.role = "USER";
+        }
+        if (this.status == null) {
+            this.status = 1;
+        }
     }
 
     public Long getId() {
@@ -86,6 +104,22 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public LocalDateTime getCreatedAt() {

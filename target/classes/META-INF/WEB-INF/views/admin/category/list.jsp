@@ -78,8 +78,10 @@
                         </td>
                         <td class="actions-cell">
                             <a class="link-edit" href="${pageContext.request.contextPath}/admin/categories/edit/${cate.id}">Sửa</a>
-                            <a class="link-delete" href="${pageContext.request.contextPath}/admin/categories/delete/${cate.id}"
-                               onclick="return confirm('Bạn có chắc muốn xóa danh mục này?');">Xóa</a>
+                            <button type="button" class="link-delete btn-link-delete"
+                                    data-url="${pageContext.request.contextPath}/admin/categories/delete/${cate.id}"
+                                    data-name="<c:out value='${cate.name}'/>"
+                                    onclick="openDeleteModal(this)">Xóa</button>
                         </td>
                     </tr>
                 </c:forEach>
@@ -109,5 +111,30 @@
         </div>
     </c:if>
 </div>
+
+<div id="deleteModal" class="modal-overlay" style="display:none;">
+    <div class="modal-box">
+        <h3>Xác nhận xóa danh mục</h3>
+        <p id="deleteModalText">Bạn có chắc chắn muốn xóa danh mục này không?</p>
+        <form id="deleteModalForm" method="post" action="">
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary btn-inline" onclick="closeDeleteModal()">Hủy</button>
+                <button type="submit" class="btn btn-danger btn-inline">Xóa ngay</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function openDeleteModal(btn) {
+        var url = btn.getAttribute('data-url');
+        var name = btn.getAttribute('data-name') || '';
+        document.getElementById('deleteModalForm').action = url;
+        document.getElementById('deleteModalText').textContent = 'Bạn có chắc chắn muốn xóa danh mục "' + name + '" không?';
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+</script>
 </body>
 </html>

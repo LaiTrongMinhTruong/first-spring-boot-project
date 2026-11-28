@@ -3,15 +3,19 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <title>Trang chủ - Spring Boot Auth</title>
+    <title>Trang chủ - Spring Boot 4 Auth</title>
 </head>
 <body>
 <div class="card card-wide centered-card">
     <div class="card-header">
-        <span class="badge">Đang đăng nhập</span>
+        <span class="badge">Đang đăng nhập (${user.role})</span>
         <h1>Xin chào, <c:out value="${user.fullName}"/>!</h1>
         <p>Bạn đã đăng nhập thành công vào hệ thống</p>
     </div>
+
+    <c:if test="${not empty error}">
+        <div class="alert alert-error"><c:out value="${error}"/></div>
+    </c:if>
 
     <div class="profile-box">
         <div class="profile-row">
@@ -30,12 +34,18 @@
             <span class="profile-label">Email</span>
             <span class="profile-value"><c:out value="${user.email}"/></span>
         </div>
+        <div class="profile-row">
+            <span class="profile-label">Vai trò</span>
+            <span class="profile-value"><c:out value="${user.role}"/></span>
+        </div>
     </div>
 
     <div class="action-row">
-        <a href="${pageContext.request.contextPath}/admin/categories/searchpaginated" class="btn btn-primary">
-            Quản lý Danh mục (Tìm kiếm &amp; Phân trang)
-        </a>
+        <c:if test="${user.role == 'ADMIN'}">
+            <a href="${pageContext.request.contextPath}/admin/home" class="btn btn-primary">
+                Vào trang Quản trị (Admin)
+            </a>
+        </c:if>
         <form action="${pageContext.request.contextPath}/logout" method="post" style="margin-top: 10px;">
             <button type="submit" class="btn btn-danger">Đăng xuất</button>
         </form>

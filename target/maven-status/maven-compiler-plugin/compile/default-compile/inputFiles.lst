@@ -1,9 +1,11 @@
-/home/truong/Documents/workspace-spring-tools-for-eclipse-5.4.0.RELEASE/springboot-auth-jsp/src/main/java/com/example/auth/ServletInitializer.java
 /home/truong/Documents/workspace-spring-tools-for-eclipse-5.4.0.RELEASE/springboot-auth-jsp/src/main/java/com/example/auth/SpringBootAuthJspApplication.java
+/home/truong/Documents/workspace-spring-tools-for-eclipse-5.4.0.RELEASE/springboot-auth-jsp/src/main/java/com/example/auth/config/AdminInterceptor.java
 /home/truong/Documents/workspace-spring-tools-for-eclipse-5.4.0.RELEASE/springboot-auth-jsp/src/main/java/com/example/auth/config/CustomSiteMeshFilter.java
 /home/truong/Documents/workspace-spring-tools-for-eclipse-5.4.0.RELEASE/springboot-auth-jsp/src/main/java/com/example/auth/config/DataInitializer.java
 /home/truong/Documents/workspace-spring-tools-for-eclipse-5.4.0.RELEASE/springboot-auth-jsp/src/main/java/com/example/auth/config/JSPStaticResourceConfigurer.java
 /home/truong/Documents/workspace-spring-tools-for-eclipse-5.4.0.RELEASE/springboot-auth-jsp/src/main/java/com/example/auth/config/TomcatJSPConfiguration.java
+/home/truong/Documents/workspace-spring-tools-for-eclipse-5.4.0.RELEASE/springboot-auth-jsp/src/main/java/com/example/auth/config/WebMvcConfig.java
+/home/truong/Documents/workspace-spring-tools-for-eclipse-5.4.0.RELEASE/springboot-auth-jsp/src/main/java/com/example/auth/controller/AdminUserController.java
 /home/truong/Documents/workspace-spring-tools-for-eclipse-5.4.0.RELEASE/springboot-auth-jsp/src/main/java/com/example/auth/controller/AuthController.java
 /home/truong/Documents/workspace-spring-tools-for-eclipse-5.4.0.RELEASE/springboot-auth-jsp/src/main/java/com/example/auth/controller/CategoryController.java
 /home/truong/Documents/workspace-spring-tools-for-eclipse-5.4.0.RELEASE/springboot-auth-jsp/src/main/java/com/example/auth/entity/Category.java

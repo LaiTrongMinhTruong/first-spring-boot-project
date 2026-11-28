@@ -2,6 +2,8 @@ package com.example.auth.config;
 
 import com.example.auth.entity.Category;
 import com.example.auth.repository.CategoryRepository;
+import com.example.auth.repository.UserRepository;
+import com.example.auth.service.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,7 +14,9 @@ import java.util.List;
 public class DataInitializer {
 
     @Bean
-    public CommandLineRunner seedCategories(CategoryRepository categoryRepository) {
+    public CommandLineRunner seedData(CategoryRepository categoryRepository,
+                                      UserRepository userRepository,
+                                      UserService userService) {
         return args -> {
             if (categoryRepository.count() == 0) {
                 categoryRepository.saveAll(List.of(
@@ -28,6 +32,24 @@ public class DataInitializer {
                         new Category("Loa Bluetooth", "speaker.png", 1)
                 ));
             }
+
+            if (!userRepository.existsByUsername("admin")) {
+                userService.createByAdmin("admin", "admin123", "Quản trị viên", "admin@example.com", "ADMIN", 1);
+            }
+            if (userRepository.count() < 5) {
+                seedUserIfMissing(userRepository, userService, "nguyenvana", "123456", "Nguyễn Văn A", "nguyenvana@example.com", "USER", 1);
+                seedUserIfMissing(userRepository, userService, "tranthib", "123456", "Trần Thị B", "tranthib@example.com", "USER", 1);
+                seedUserIfMissing(userRepository, userService, "levanc", "123456", "Lê Văn C", "levanc@example.com", "USER", 1);
+                seedUserIfMissing(userRepository, userService, "phamthid", "123456", "Phạm Thị D", "phamthid@example.com", "USER", 0);
+            }
         };
+    }
+
+    private void seedUserIfMissing(UserRepository repo, UserService userService,
+                                   String username, String password, String fullName,
+                                   String email, String role, Integer status) {
+        if (!repo.existsByUsername(username) && !repo.existsByEmail(email)) {
+            userService.createByAdmin(username, password, fullName, email, role, status);
+        }
     }
 }
